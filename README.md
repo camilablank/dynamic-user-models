@@ -24,7 +24,7 @@ Recent work has shown that:
 ## Planned Experiments
 
 ### **Phase A — Detection**
-- Use **linear probes**on hidden states to identify neurons/directions correlated with a target user attribute.
+- Use **linear probes** on hidden states to identify neurons/directions correlated with a target user attribute.
 - Attributes tested:
   - Knowledge state (`knows_fact` vs `does_not_know_fact`)
   - Emotional state (`happy` vs `sad`)

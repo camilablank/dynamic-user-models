@@ -26,9 +26,10 @@ Recent work has shown that:
 ### **Phase A — Detection**
 - Use **linear probes** on hidden states to identify neurons/directions correlated with a target user attribute.
 - Attributes tested:
-  - Knowledge state (`knows_fact` vs `does_not_know_fact`)
-  - Emotional state (`happy` vs `sad`)
-  - Self-perception (`confident` vs. `insecure`)
+  - Knowledge state (`knows_fact` vs. `does_not_know_fact`)
+  - Emotional state (`happy` vs. `neutral` vs. `sad`)
+  - Self-perception (`confident` vs. `neutral` vs. `insecure`)
+  - Trust (`trusting` vs. `neutral` vs. `skeptical`)
 - Train probes on one-turn conversations; test on later turns to see if attribute is tracked.
 
 ### **Phase B — Dynamics**

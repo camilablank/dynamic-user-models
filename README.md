@@ -1,7 +1,7 @@
 # Dynamic User Modeling in Large Language Models
 
 ## Overview
-This mechanistic interpretability project investigates whether Large Language Models (LLMs) form dynamic models of users. That is, whether they internally track user attributes such as knowledge, emotions, and goals, that change across multiple conversation turns.
+This mechanistic interpretability project investigates whether **Large Language Models (LLMs) form dynamic models of users**. That is, whether they internally track user attributes such as knowledge, emotions, and goals, that change across multiple conversation turns.
 
 The goal is to:
 1. **Detect**: Identify representations of user attributes in model activations.

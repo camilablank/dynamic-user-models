@@ -1,0 +1,173 @@
+{
+  "n_dialogs": 50,
+  "attributes": {
+    "emotion": 13,
+    "trust": 12,
+    "confidence": 9,
+    "knowledge": 16
+  },
+  "user_turns": {
+    "min": 5,
+    "max": 7,
+    "mean": 5.84,
+    "median": 6
+  },
+  "with_switch": 50,
+  "without_switch": 0,
+  "style_controlled_fraction": 0.0,
+  "audited": 50,
+  "consistency_metrics": {
+    "mean_score": 1.0,
+    "mean_per_turn_accuracy": 1.0,
+    "mean_switch_error": 0.0,
+    "n_audited": 50
+  },
+  "topic_diversity": {
+    "distinct_topics": 14,
+    "entropy_bits": 3.545658881363032,
+    "top_topics": [
+      [
+        "mathematics",
+        9
+      ],
+      [
+        "budget travel",
+        7
+      ],
+      [
+        "basic statistics",
+        5
+      ],
+      [
+        "bike maintenance",
+        5
+      ],
+      [
+        "garden planning",
+        4
+      ],
+      [
+        "luxury vehicles",
+        4
+      ],
+      [
+        "technology",
+        3
+      ],
+      [
+        "python debugging",
+        3
+      ],
+      [
+        "baking sourdough",
+        2
+      ],
+      [
+        "learning guitar",
+        2
+      ]
+    ]
+  },
+  "hidden_latent_correlations_preview": [
+    {
+      "scope": "dialog",
+      "dialog_id": "9e66d16b-234f-488a-a762-7e5c2f249a4d",
+      "primary_family": "knowledge",
+      "latent_family": "confidence",
+      "latent_value": "confidence_expression",
+      "evidence": "Found confidence indicator in knowledge dialog",
+      "correlation_strength": 0.6,
+      "flagged": "YES"
+    },
+    {
+      "scope": "dialog",
+      "dialog_id": "c104dfed-ec6f-43d8-b650-4ed90b836c6b",
+      "primary_family": "knowledge",
+      "latent_family": "confidence",
+      "latent_value": "confidence_expression",
+      "evidence": "Found confidence indicator in knowledge dialog",
+      "correlation_strength": 0.6,
+      "flagged": "YES"
+    },
+    {
+      "scope": "dialog",
+      "dialog_id": "9943a651-daff-484a-96b2-01256f919f19",
+      "primary_family": "confidence",
+      "latent_family": "knowledge",
+      "latent_value": "knowledge_expression",
+      "evidence": "Found knowledge indicator in confidence dialog",
+      "correlation_strength": 0.6,
+      "flagged": "YES"
+    },
+    {
+      "scope": "dialog",
+      "dialog_id": "225480bf-e73d-4934-9c10-2e701e3c8f74",
+      "primary_family": "knowledge",
+      "latent_family": "confidence",
+      "latent_value": "confidence_expression",
+      "evidence": "Found confidence indicator in knowledge dialog",
+      "correlation_strength": 0.6,
+      "flagged": "YES"
+    },
+    {
+      "scope": "dialog",
+      "dialog_id": "337602db-a712-4a8e-bd4a-72d6a9a8f73a",
+      "primary_family": "knowledge",
+      "latent_family": "trust",
+      "latent_value": "trust_expression",
+      "evidence": "Found trust indicator in knowledge dialog",
+      "correlation_strength": 0.6,
+      "flagged": "YES"
+    },
+    {
+      "scope": "dialog",
+      "dialog_id": "af930460-d241-4a7c-9c1b-e19110da0d38",
+      "primary_family": "knowledge",
+      "latent_family": "confidence",
+      "latent_value": "confidence_expression",
+      "evidence": "Found confidence indicator in knowledge dialog",
+      "correlation_strength": 0.6,
+      "flagged": "YES"
+    },
+    {
+      "scope": "dialog",
+      "dialog_id": "c15022d4-31ba-4ba2-b8ab-f5197d5d2110",
+      "primary_family": "knowledge",
+      "latent_family": "confidence",
+      "latent_value": "confidence_expression",
+      "evidence": "Found confidence indicator in knowledge dialog",
+      "correlation_strength": 0.6,
+      "flagged": "YES"
+    },
+    {
+      "scope": "dialog",
+      "dialog_id": "c15022d4-31ba-4ba2-b8ab-f5197d5d2110",
+      "primary_family": "knowledge",
+      "latent_family": "trust",
+      "latent_value": "trust_expression",
+      "evidence": "Found trust indicator in knowledge dialog",
+      "correlation_strength": 0.6,
+      "flagged": "YES"
+    },
+    {
+      "scope": "dialog",
+      "dialog_id": "c0f4d840-bea9-404c-a4c0-6c340098337f",
+      "primary_family": "knowledge",
+      "latent_family": "confidence",
+      "latent_value": "confidence_expression",
+      "evidence": "Found confidence indicator in knowledge dialog",
+      "correlation_strength": 0.6,
+      "flagged": "YES"
+    },
+    {
+      "scope": "dialog",
+      "dialog_id": "c0f4d840-bea9-404c-a4c0-6c340098337f",
+      "primary_family": "knowledge",
+      "latent_family": "trust",
+      "latent_value": "trust_expression",
+      "evidence": "Found trust indicator in knowledge dialog",
+      "correlation_strength": 0.6,
+      "flagged": "YES"
+    }
+  ]
+}

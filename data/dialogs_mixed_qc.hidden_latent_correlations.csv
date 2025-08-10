@@ -1,0 +1,20 @@
+scope,dialog_id,primary_family,latent_family,latent_value,evidence,correlation_strength,flagged
+dialog,9e66d16b-234f-488a-a762-7e5c2f249a4d,knowledge,confidence,confidence_expression,Found confidence indicator in knowledge dialog,0.6,YES
+dialog,c104dfed-ec6f-43d8-b650-4ed90b836c6b,knowledge,confidence,confidence_expression,Found confidence indicator in knowledge dialog,0.6,YES
+dialog,9943a651-daff-484a-96b2-01256f919f19,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,225480bf-e73d-4934-9c10-2e701e3c8f74,knowledge,confidence,confidence_expression,Found confidence indicator in knowledge dialog,0.6,YES
+dialog,337602db-a712-4a8e-bd4a-72d6a9a8f73a,knowledge,trust,trust_expression,Found trust indicator in knowledge dialog,0.6,YES
+dialog,af930460-d241-4a7c-9c1b-e19110da0d38,knowledge,confidence,confidence_expression,Found confidence indicator in knowledge dialog,0.6,YES
+dialog,c15022d4-31ba-4ba2-b8ab-f5197d5d2110,knowledge,confidence,confidence_expression,Found confidence indicator in knowledge dialog,0.6,YES
+dialog,c15022d4-31ba-4ba2-b8ab-f5197d5d2110,knowledge,trust,trust_expression,Found trust indicator in knowledge dialog,0.6,YES
+dialog,c0f4d840-bea9-404c-a4c0-6c340098337f,knowledge,confidence,confidence_expression,Found confidence indicator in knowledge dialog,0.6,YES
+dialog,c0f4d840-bea9-404c-a4c0-6c340098337f,knowledge,trust,trust_expression,Found trust indicator in knowledge dialog,0.6,YES
+dialog,c0a0502e-edc6-4074-872e-3903e73cef04,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,ddab8ed6-4ab3-4f7d-b887-a37f24bb3810,knowledge,confidence,confidence_expression,Found confidence indicator in knowledge dialog,0.6,YES
+dialog,51f74265-9ce9-487e-b42b-32dd87fd62a9,knowledge,confidence,confidence_expression,Found confidence indicator in knowledge dialog,0.6,YES
+dialog,733d1444-7216-458c-af0e-7fb24713825c,knowledge,trust,trust_expression,Found trust indicator in knowledge dialog,0.6,YES
+dialog,1c1bf1d2-0b71-47be-ac20-b482d8352926,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,5d35d4fe-0dd4-492e-b1e1-bb695a4c8d00,knowledge,trust,trust_expression,Found trust indicator in knowledge dialog,0.6,YES
+dialog,ab8b0a14-9c33-4464-986b-8f21af7d9de5,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,de14199b-3f9e-499f-9570-e7f6ab1e62d4,knowledge,trust,trust_expression,Found trust indicator in knowledge dialog,0.6,YES
+global,,all,cross_attribute,,,0.36,YES

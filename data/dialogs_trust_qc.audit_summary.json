@@ -1,0 +1,69 @@
+{
+  "n_dialogs": 50,
+  "attributes": {
+    "trust": 50
+  },
+  "user_turns": {
+    "min": 5,
+    "max": 7,
+    "mean": 5.86,
+    "median": 6
+  },
+  "with_switch": 50,
+  "without_switch": 0,
+  "style_controlled_fraction": 0.0,
+  "audited": 50,
+  "consistency_metrics": {
+    "mean_score": 1.0,
+    "mean_per_turn_accuracy": 1.0,
+    "mean_switch_error": 0.0,
+    "n_audited": 50
+  },
+  "topic_diversity": {
+    "distinct_topics": 10,
+    "entropy_bits": 3.2530201924480453,
+    "top_topics": [
+      [
+        "garden planning",
+        7
+      ],
+      [
+        "learning guitar",
+        7
+      ],
+      [
+        "bike maintenance",
+        6
+      ],
+      [
+        "time management",
+        6
+      ],
+      [
+        "basic statistics",
+        5
+      ],
+      [
+        "luxury vehicles",
+        5
+      ],
+      [
+        "baking sourdough",
+        4
+      ],
+      [
+        "public speaking",
+        4
+      ],
+      [
+        "python debugging",
+        4
+      ],
+      [
+        "budget travel",
+        2
+      ]
+    ]
+  },
+  "hidden_latent_correlations_preview": []
+}

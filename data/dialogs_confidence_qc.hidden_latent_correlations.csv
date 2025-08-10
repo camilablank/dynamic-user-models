@@ -1,0 +1,32 @@
+scope,dialog_id,primary_family,latent_family,latent_value,evidence,correlation_strength,flagged
+dialog,d182364a-63d8-45fe-b521-d1192080064c,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,38d4d11b-c467-4cbf-b61d-bb820de6d0b9,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,6b5ea378-176b-4260-a08f-d3dd6dfbf9d7,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,fa084970-b199-461c-883e-79548119eb51,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,53cdab15-c645-40dd-b8b3-ceae653704be,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,14fbcf34-61a8-404a-8f51-4096d3556bb8,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,fb39eb5e-2d7d-4546-b7a1-323bd2f9dd88,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,897cc42c-af34-484d-a167-6c7385ae7e14,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,2c591d43-618f-414c-8a28-f0e352272747,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,2013720d-0d30-4a57-9f12-92ed7b14eea8,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,74d7e53c-843d-4706-a64f-943fdaccf287,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,45e19dad-2e86-48c0-9172-348ab742af49,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,b1d67381-404f-4bcf-99c3-61aa419b15e7,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,fce99d49-6da4-425e-b601-011662dc7fa8,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,6db6acbe-ef6e-49c8-8ba9-5ed8c792d531,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,01344bd5-b69a-4393-b5fb-5a2b729dfe7c,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,ec0f4160-e855-47aa-bfe0-0330a6e9e67d,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,dc46bb09-e3a2-4974-9520-64eecf519e23,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,502d670a-486d-4b7f-a249-b68d01022958,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,d75a2545-5f79-4b73-9256-e7c929001503,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,49e99258-902d-4478-baf8-540c58f49d08,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,5d390249-18ca-4dcb-8d6f-cf7c800b0bf8,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,844e2b84-c170-4b05-9550-653a6bf27672,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,a8261adc-0394-44cc-be3e-7566fc7780e4,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,b84d9676-e7c8-4d57-9ff3-3f1900f0eeda,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,e9ed64d9-dd95-4516-9580-90ad7472b4bf,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,648f2cb6-91ac-4c3d-b980-7771eb875470,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,b9d830a7-30f0-4209-8d23-3d14cc7c48d6,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,d1c3b664-42d2-47d7-bd8d-99d0d385622a,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+dialog,8bd34ed1-643a-4386-9c9b-051632bfbfe9,confidence,knowledge,knowledge_expression,Found knowledge indicator in confidence dialog,0.6,YES
+global,,all,cross_attribute,,,0.6,YES

@@ -1,0 +1,24 @@
+name: dyn_user_llm
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - pytorch=2.2.*
+  - torchvision=0.17.*
+  - torchaudio=2.2.*
+  - pip:
+      - transformers==4.41.2
+      - accelerate==0.30.1
+      - datasets==2.19.1
+      - scikit-learn==1.5.0
+      - einops==0.8.0
+      - matplotlib==3.8.4
+      - textblob==0.18.0.post0
+      - sentencepiece==0.2.0
+      - protobuf==4.25.3
+      - transformer-lens==1.14.0
+      - ipykernel==6.29.4

@@ -1,67 +1,67 @@
 {
-  "n_dialogs": 50,
+  "n_dialogs": 100,
   "attributes": {
-    "emotion": 50
+    "trust": 100
   },
   "user_turns": {
     "min": 5,
     "max": 7,
-    "mean": 6.1,
+    "mean": 6.09,
     "median": 6
   },
-  "with_switch": 50,
+  "with_switch": 100,
   "without_switch": 0,
   "style_controlled_fraction": 0.0,
-  "audited": 50,
+  "audited": 100,
   "consistency_metrics": {
     "mean_score": 1.0,
     "mean_per_turn_accuracy": 1.0,
     "mean_switch_error": 0.0,
-    "n_audited": 50
+    "n_audited": 100
   },
   "topic_diversity": {
     "distinct_topics": 10,
-    "entropy_bits": 3.2407566314063017,
+    "entropy_bits": 3.2469280944495247,
     "top_topics": [
       [
-        "time management",
-        8
-      ],
-      [
-        "garden planning",
-        7
+        "learning guitar",
+        15
       ],
       [
         "bike maintenance",
-        6
-      ],
-      [
-        "public speaking",
-        6
-      ],
-      [
-        "basic statistics",
-        5
-      ],
-      [
-        "learning guitar",
-        5
-      ],
-      [
-        "budget travel",
-        4
-      ],
-      [
-        "python debugging",
-        3
+        14
       ],
       [
         "luxury vehicles",
-        3
+        13
+      ],
+      [
+        "python debugging",
+        12
+      ],
+      [
+        "garden planning",
+        10
+      ],
+      [
+        "basic statistics",
+        9
+      ],
+      [
+        "public speaking",
+        8
       ],
       [
         "baking sourdough",
-        3
+        7
+      ],
+      [
+        "budget travel",
+        7
+      ],
+      [
+        "time management",
+        5
       ]
     ]
   },

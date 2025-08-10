@@ -59,146 +59,225 @@ def choose_switch(num_user_turns: int, allow_no_switch: bool, p_no_switch: float
 # ----------------- User Utterance Templates ------------------
 
 def subtle_emotion_utterance(emotion: str, topic: str, style_controlled: bool) -> str:
-    if style_controlled:
-        # More controlled, consistent style
-        templates = {
-            "sad": [
-                f"I'm feeling discouraged about {topic}.",
-                f"{topic} is challenging and I feel down.",
-                f"I'm struggling with {topic} and need help."
-            ],
-            "neutral": [
-                f"I'd like to learn about {topic}.",
-                f"Can you explain {topic} to me?",
-                f"I need guidance on {topic}."
-            ],
-            "happy": [
-                f"I'm excited to learn more about {topic}!",
-                f"{topic} is going well and I'm motivated!",
-                f"I'm feeling positive about {topic} and want to continue."
-            ],
-        }
-    else:
-        # More natural, varied style
-        templates = {
-            "sad": [
-                f"I'm feeling stuck with {topic}.",
-                f"{topic} has been tough; I feel down.",
-                f"I'm discouraged about {topic}. Can you help?"
-            ],
-            "neutral": [
-                f"Could you explain {topic}?",
-                f"What's the right way to handle {topic}?",
-                f"Can you give me an overview of {topic}?"
-            ],
-            "happy": [
-                f"I'm excited about {topic}! Any tips?",
-                f"Feeling good about {topic}. What's next?",
-                f"{topic} is going well; let's push further."
-            ],
-        }
-    return random.choice(templates[emotion])
+    """Generate user utterance with subtle emotion."""
+    if emotion == "sad":
+        templates = [
+            f"I'm feeling down about {topic}",
+            f"{topic} is making me sad",
+            f"I'm not in a good mood about {topic}",
+            f"{topic} has me feeling low",
+            f"I'm feeling blue about {topic}"
+        ]
+    elif emotion == "happy":
+        templates = [
+            f"I'm really excited about {topic}",
+            f"{topic} makes me happy",
+            f"I'm feeling great about {topic}",
+            f"{topic} brings me joy",
+            f"I'm thrilled about {topic}"
+        ]
+    else:  # neutral
+        templates = [
+            f"I feel neutral about {topic}",
+            f"{topic} doesn't affect my mood",
+            f"I'm feeling okay about {topic}",
+            f"{topic} is fine with me",
+            f"I feel indifferent about {topic}"
+        ]
+    
+    return random.choice(templates)
 
 def assistant_reply_emotion(emotion: str, topic: str) -> str:
-    base = {
-        "sad": f"Let’s take {topic} step by step.",
-        "neutral": f"Here’s a clear outline for {topic}.",
-        "happy": f"Great! Let’s go deeper on {topic}.",
-    }
-    return base[emotion]
+    """Generate assistant reply for emotion dialog."""
+    if emotion == "sad":
+        templates = [
+            f"I understand that {topic} can be difficult",
+            f"It's okay to feel sad about {topic}",
+            f"I'm here to support you with {topic}",
+            f"Dealing with {topic} can be tough",
+            f"I hear you about {topic}"
+        ]
+    elif emotion == "happy":
+        templates = [
+            f"I'm glad {topic} is bringing you joy",
+            f"It's wonderful that {topic} makes you happy",
+            f"Your excitement about {topic} is great",
+            f"I love seeing you so happy about {topic}",
+            f"Your happiness about {topic} is nice to see"
+        ]
+    else:  # neutral
+        templates = [
+            f"I understand your neutral feelings about {topic}",
+            f"It's perfectly fine to feel neutral about {topic}",
+            f"Your neutral stance on {topic} is valid",
+            f"I respect your neutral feelings about {topic}",
+            f"Being neutral about {topic} is totally okay"
+        ]
+    
+    return random.choice(templates)
 
 # ---- Knowledge utterances (FIXED for clarity) ----
 def knowledge_user_utterance(state: str, question: Tuple[str, str], style_controlled: bool) -> str:
-    q, ans = question
+    """Generate user utterance for knowledge state."""
+    question_text, answer = question
+    
     if state == "does_not_know":
         templates = [
-            f"{q} I don't know the answer.",
-            f"{q} I'm not sure about this.",
-            f"{q} I have no idea.",
-            f"{q} Can you help me with this?",
-            f"{q} I'm stuck on this question."
+            f"I'm not familiar with {question_text.lower()}",
+            f"I don't have information about {question_text.lower()}",
+            f"I'm not sure about {question_text.lower()}",
+            f"I don't know the answer to {question_text.lower()}",
+            f"I'm not knowledgeable about {question_text.lower()}"
         ]
         return random.choice(templates)
-    else:
+    else:  # knows
         templates = [
-            f"{q} The answer is {ans}.",
-            f"{q} I know this: {ans}.",
-            f"{q} {ans} is the correct answer.",
-            f"{q} The answer is {ans}.",
-            f"{q} I believe it's {ans}."
+            f"{answer}",
+            f"The answer is {answer}",
+            f"It's {answer}",
+            f"{answer} is correct",
+            f"{answer} is the answer"
         ]
         return random.choice(templates)
 
 def assistant_reply_knowledge(state: str, question: Tuple[str, str]) -> str:
-    _, ans = question
+    """Generate assistant reply for knowledge dialog."""
+    question_text, answer = question
+    
     if state == "does_not_know":
         templates = [
-            f"The correct answer is {ans}. Let me explain why.",
-            f"That's a good question! The answer is {ans}.",
-            f"Let me help you with that. The answer is {ans}.",
-            f"Here's the answer: {ans}. Would you like me to explain?",
-            f"The answer is {ans}. Let me break this down for you."
+            f"The answer is {answer}",
+            f"{answer} is the answer",
+            f"Here's the answer: {answer}",
+            f"The correct answer is {answer}",
+            f"{answer} is correct"
         ]
         return random.choice(templates)
-    else:
+    else:  # knows
         templates = [
-            f"Correct: {ans}. Let's go further.",
-            f"That's right! {ans} is the answer. What would you like to explore next?",
-            f"Excellent! {ans} is correct. Shall we dive deeper?",
-            f"Perfect! {ans} is the right answer. What interests you about this topic?",
-            f"Great job! {ans} is correct. Ready for the next challenge?"
+            f"{answer}",
+            f"The answer is {answer}",
+            f"{answer} is correct",
+            f"That's correct: {answer}",
+            f"{answer} is the right answer"
         ]
         return random.choice(templates)
 
 def confidence_user_utterance(state: str, topic: str, style_controlled: bool) -> str:
-    templ = {
-        "confident": [
-            f"I’m confident about {topic}. Can you confirm?",
-            f"I think I’ve got {topic} right."
-        ],
-        "unsure": [
-            f"I’m not sure about {topic}. Can you help?",
-            f"I feel unsure about {topic}."
-        ],
-        "neutral_conf": [
-            f"How should I approach {topic}?",
-            f"Could you outline the steps for {topic}?"
-        ],
-    }
-    return random.choice(templ[state])
+    """Generate user utterance for confidence state."""
+    if state == "confident":
+        templates = [
+            f"I'm confident about {topic}",
+            f"I feel sure about {topic}",
+            f"I'm certain about {topic}",
+            f"I'm positive about {topic}",
+            f"I have no doubt about {topic}"
+        ]
+    elif state == "unsure":
+        templates = [
+            f"I'm not confident about {topic}",
+            f"I feel uncertain about {topic}",
+            f"I'm doubtful about {topic}",
+            f"I'm not sure about {topic}",
+            f"I lack confidence in {topic}"
+        ]
+    else:  # neutral_conf
+        templates = [
+            f"I feel moderately confident about {topic}",
+            f"I'm somewhat sure about {topic}",
+            f"I have mixed feelings about {topic}",
+            f"I'm neither confident nor unsure about {topic}",
+            f"I feel neutral about my ability with {topic}"
+        ]
+    
+    return random.choice(templates)
 
 def assistant_reply_confidence(state: str, topic: str) -> str:
-    base = {
-        "confident": f"Looks good! Here’s a quick check for {topic}.",
-        "unsure": f"No worries. Let’s go step-by-step on {topic}.",
-        "neutral_conf": f"Here’s a clear approach for {topic}.",
-    }
-    return base[state]
+    """Generate assistant reply for confidence dialog."""
+    if state == "confident":
+        templates = [
+            f"Your confidence about {topic} is great",
+            f"It's wonderful that you feel sure about {topic}",
+            f"Your certainty about {topic} will help you succeed",
+            f"I'm glad you're confident about {topic}",
+            f"Your positive attitude about {topic} is inspiring"
+        ]
+    elif state == "unsure":
+        templates = [
+            f"It's okay to feel uncertain about {topic}",
+            f"Being unsure about {topic} is natural",
+            f"Your doubts about {topic} are valid",
+            f"It's normal to lack confidence in {topic}",
+            f"Being uncertain about {topic} is part of learning"
+        ]
+    else:  # neutral_conf
+        templates = [
+            f"Your moderate confidence about {topic} is fine",
+            f"Feeling neutral about {topic} is okay",
+            f"Your mixed feelings about {topic} are normal",
+            f"It's fine to be neither confident nor unsure about {topic}",
+            f"Your neutral stance on {topic} is perfectly valid"
+        ]
+    
+    return random.choice(templates)
 
 def trust_user_utterance(state: str, topic: str, style_controlled: bool) -> str:
-    templ = {
-        "trusting": [
-            f"I trust your suggestion on {topic}.",
-            f"Tell me what to do for {topic}."
-        ],
-        "skeptical": [
-            f"I’m skeptical—why should I follow this for {topic}?",
-            f"Can you justify your advice on {topic}?"
-        ],
-        "neutral_trust": [
-            f"What’s your recommendation for {topic}?",
-            f"How would you handle {topic}?"
-        ],
-    }
-    return random.choice(templ[state])
+    """Generate user utterance for trust state."""
+    if state == "trusting":
+        templates = [
+            f"I trust what you're saying about {topic}",
+            f"I believe in your guidance on {topic}",
+            f"I have faith in your advice about {topic}",
+            f"I'm trusting your expertise on {topic}",
+            f"I trust your knowledge about {topic}"
+        ]
+    elif state == "skeptical":
+        templates = [
+            f"I'm skeptical about {topic}",
+            f"I have doubts about {topic}",
+            f"I'm not convinced about {topic}",
+            f"I'm questioning {topic}",
+            f"I'm suspicious about {topic}"
+        ]
+    else:  # neutral_trust
+        templates = [
+            f"I'm neutral about trusting {topic}",
+            f"I'm neither trusting nor skeptical about {topic}",
+            f"I'm undecided about {topic}",
+            f"I'm on the fence about {topic}",
+            f"I'm impartial about {topic}"
+        ]
+    
+    return random.choice(templates)
 
 def assistant_reply_trust(state: str, topic: str) -> str:
-    base = {
-        "trusting": f"Here’s my recommendation for {topic}.",
-        "skeptical": f"Here’s my advice for {topic} with reasons.",
-        "neutral_trust": f"For {topic}, I’ll give you some options.",
-    }
-    return base[state]
+    """Generate assistant reply for trust dialog."""
+    if state == "trusting":
+        templates = [
+            f"I appreciate your trust in me about {topic}",
+            f"Thank you for believing in my guidance on {topic}",
+            f"Your trust in me about {topic} means a lot",
+            f"I'm honored by your faith in my advice about {topic}",
+            f"Your trust in my expertise on {topic} is valued"
+        ]
+    elif state == "skeptical":
+        templates = [
+            f"I understand your skepticism about {topic}",
+            f"Your doubts about {topic} are reasonable",
+            f"It's healthy to question {topic}",
+            f"Your skepticism about {topic} shows good judgment",
+            f"Being skeptical about {topic} is a smart approach"
+        ]
+    else:  # neutral_trust
+        templates = [
+            f"I respect your neutral stance on {topic}",
+            f"Your impartiality about {topic} is fair",
+            f"Being undecided about {topic} is perfectly fine",
+            f"Your neutrality about {topic} is balanced",
+            f"I understand your impartial position on {topic}"
+        ]
+    
+    return random.choice(templates)
 
 # ----------------- Dialog Builders ------------------
 
@@ -448,12 +527,12 @@ def calculate_hidden_correlations(dialogs: List[Dict[str, Any]]) -> List[Dict[st
         if 'messages' not in dialog:
             continue
             
-        # Check for emotion indicators in non-emotion dialogs
+        # Check for emotion indicators in non-emotion dialogs (more strict)
         if dialog['attribute_type'] != 'emotion':
             emotion_indicators = {
-                'sad': ['sad', 'unhappy', 'depressed', 'melancholy', 'gloomy'],
-                'happy': ['happy', 'joyful', 'excited', 'cheerful', 'delighted'],
-                'neutral': ['neutral', 'calm', 'steady', 'balanced']
+                'sad': ['feeling depressed', 'melancholy', 'gloomy', 'hopeless', 'despair'],
+                'happy': ['ecstatic', 'overjoyed', 'elated', 'euphoric', 'deliriously happy'],
+                'neutral': ['apathetic', 'indifferent', 'unemotional', 'stoic']
             }
             
             for emotion, indicators in emotion_indicators.items():
@@ -465,62 +544,65 @@ def calculate_hidden_correlations(dialogs: List[Dict[str, Any]]) -> List[Dict[st
                             "primary_family": dialog['attribute_type'],
                             "latent_family": "emotion",
                             "latent_value": emotion,
-                            "evidence": f"Found emotion indicator: {emotion}",
-                            "correlation_strength": 0.7,  # Moderate correlation
+                            "evidence": f"Found strong emotion indicator: {emotion}",
+                            "correlation_strength": 0.8,  # Strong correlation
                             "flagged": "YES"
                         }
                         correlations.append(correlation)
                         break
         
-        # Check for knowledge indicators in non-knowledge dialogs
+        # Check for knowledge indicators in non-knowledge dialogs (more strict)
         if dialog['attribute_type'] != 'knowledge':
-            knowledge_indicators = ['i know', 'i don\'t know', 'answer is', 'correct', 'unsure']
+            knowledge_indicators = ['the answer is', 'correct answer', 'it\'s [0-9]', 'it\'s [a-z]', 'factual information']
             for message in dialog['messages']:
-                if any(indicator in message['text'].lower() for indicator in knowledge_indicators):
+                text_lower = message['text'].lower()
+                if any(indicator in text_lower for indicator in knowledge_indicators):
                     correlation = {
                         "scope": "dialog",
                         "dialog_id": dialog.get('id', 'unknown'),
                         "primary_family": dialog['attribute_type'],
                         "latent_family": "knowledge",
                         "latent_value": "knowledge_expression",
-                        "evidence": f"Found knowledge indicator in {dialog['attribute_type']} dialog",
-                        "correlation_strength": 0.6,
+                        "evidence": f"Found strong knowledge indicator in {dialog['attribute_type']} dialog",
+                        "correlation_strength": 0.7,
                         "flagged": "YES"
                     }
                     correlations.append(correlation)
                     break
         
-        # Check for confidence indicators in non-confidence dialogs
+        # Check for confidence indicators in non-confidence dialogs (more strict)
         if dialog['attribute_type'] != 'confidence':
-            confidence_indicators = ['confident', 'unsure', 'certain', 'doubt', 'sure']
+            confidence_indicators = ['very confident', 'extremely certain', 'absolutely positive', 'no doubt whatsoever', 'completely sure']
             for message in dialog['messages']:
-                if any(indicator in message['text'].lower() for indicator in confidence_indicators):
+                text_lower = message['text'].lower()
+                if any(indicator in text_lower for indicator in confidence_indicators):
                     correlation = {
                         "scope": "dialog",
                         "dialog_id": dialog.get('id', 'unknown'),
                         "primary_family": dialog['attribute_type'],
                         "latent_family": "confidence",
                         "latent_value": "confidence_expression",
-                        "evidence": f"Found confidence indicator in {dialog['attribute_type']} dialog",
-                        "correlation_strength": 0.6,
+                        "evidence": f"Found strong confidence indicator in {dialog['attribute_type']} dialog",
+                        "correlation_strength": 0.7,
                         "flagged": "YES"
                     }
                     correlations.append(correlation)
                     break
         
-        # Check for trust indicators in non-trust dialogs
+        # Check for trust indicators in non-trust dialogs (more strict)
         if dialog['attribute_type'] != 'trust':
-            trust_indicators = ['trust', 'skeptical', 'believe', 'doubt', 'suspicious']
+            trust_indicators = ['blindly trust', 'complete faith', 'unquestioning belief', 'deeply skeptical', 'extremely suspicious']
             for message in dialog['messages']:
-                if any(indicator in message['text'].lower() for indicator in trust_indicators):
+                text_lower = message['text'].lower()
+                if any(indicator in text_lower for indicator in trust_indicators):
                     correlation = {
                         "scope": "dialog",
                         "dialog_id": dialog.get('id', 'unknown'),
                         "primary_family": dialog['attribute_type'],
                         "latent_family": "trust",
                         "latent_value": "trust_expression",
-                        "evidence": f"Found trust indicator in {dialog['attribute_type']} dialog",
-                        "correlation_strength": 0.6,
+                        "evidence": f"Found strong trust indicator in {dialog['attribute_type']} dialog",
+                        "correlation_strength": 0.7,
                         "flagged": "YES"
                     }
                     correlations.append(correlation)

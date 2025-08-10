@@ -1,0 +1,72 @@
+{
+  "n_dialogs": 100,
+  "attributes": {
+    "emotion": 26,
+    "confidence": 21,
+    "knowledge": 29,
+    "trust": 24
+  },
+  "user_turns": {
+    "min": 5,
+    "max": 7,
+    "mean": 5.97,
+    "median": 6
+  },
+  "with_switch": 100,
+  "without_switch": 0,
+  "style_controlled_fraction": 0.0,
+  "audited": 100,
+  "consistency_metrics": {
+    "mean_score": 1.0,
+    "mean_per_turn_accuracy": 1.0,
+    "mean_switch_error": 0.0,
+    "n_audited": 100
+  },
+  "topic_diversity": {
+    "distinct_topics": 17,
+    "entropy_bits": 3.945240441563368,
+    "top_topics": [
+      [
+        "basic statistics",
+        12
+      ],
+      [
+        "mathematics",
+        9
+      ],
+      [
+        "bike maintenance",
+        8
+      ],
+      [
+        "luxury vehicles",
+        8
+      ],
+      [
+        "learning guitar",
+        7
+      ],
+      [
+        "garden planning",
+        7
+      ],
+      [
+        "budget travel",
+        7
+      ],
+      [
+        "time management",
+        6
+      ],
+      [
+        "public speaking",
+        6
+      ],
+      [
+        "baking sourdough",
+        5
+      ]
+    ]
+  },
+  "hidden_latent_correlations_preview": []
+}

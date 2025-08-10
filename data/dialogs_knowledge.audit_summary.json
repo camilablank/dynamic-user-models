@@ -1,0 +1,57 @@
+{
+  "n_dialogs": 100,
+  "attributes": {
+    "knowledge": 100
+  },
+  "user_turns": {
+    "min": 5,
+    "max": 7,
+    "mean": 6.13,
+    "median": 6
+  },
+  "with_switch": 100,
+  "without_switch": 0,
+  "style_controlled_fraction": 0.0,
+  "audited": 100,
+  "consistency_metrics": {
+    "mean_score": 1.0,
+    "mean_per_turn_accuracy": 1.0,
+    "mean_switch_error": 0.0,
+    "n_audited": 100
+  },
+  "topic_diversity": {
+    "distinct_topics": 7,
+    "entropy_bits": 2.4747061945424664,
+    "top_topics": [
+      [
+        "mathematics",
+        40
+      ],
+      [
+        "astronomy",
+        14
+      ],
+      [
+        "technology",
+        13
+      ],
+      [
+        "chemistry",
+        12
+      ],
+      [
+        "geography",
+        8
+      ],
+      [
+        "geometry",
+        8
+      ],
+      [
+        "physics",
+        5
+      ]
+    ]
+  },
+  "hidden_latent_correlations_preview": []
+}

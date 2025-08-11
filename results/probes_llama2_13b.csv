@@ -1,1 +1,5 @@
 attribute,per_turn_acc,mean_switch_error,consistency_score,n_train_turns,n_test_turns,n_train_convs,n_test_convs,hidden_size,model
+emotion,1.0,0.0,1.0,1616,187,270,30,5120,meta-llama/Llama-2-13b-hf
+knowledge,1.0,0.0,1.0,1621,182,270,30,5120,meta-llama/Llama-2-13b-hf
+confidence,1.0,0.0,1.0,1618,185,270,30,5120,meta-llama/Llama-2-13b-hf
+trust,1.0,0.0,1.0,1621,182,270,30,5120,meta-llama/Llama-2-13b-hf

@@ -1,0 +1,5 @@
+attribute,per_turn_acc,mean_switch_error,consistency_score,n_train_turns,n_test_turns,n_train_convs,n_test_convs
+confidence,0.973,0.1429,0.9382,80,37,14,7
+emotion,0.92,0.0958,0.9153,103,50,18,8
+knowledge,1.0,0.0,1.0,125,57,20,9
+trust,0.9184,0.2083,0.8804,96,49,16,8

@@ -16,6 +16,8 @@ import random
 import statistics as stats
 import sys
 import uuid
+import difflib
+import re
 from collections import Counter
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -100,6 +102,78 @@ def choose_switch(num_user_turns: int, allow_no_switch: bool, p_no_switch: float
     candidates = list(range(1, num_user_turns - 1)) or [0]
     return random.choice(candidates)
 
+# ----------------------------- De-dup Helpers ------------------------------------
+
+def _normalize_for_compare(s: str) -> str:
+    s = s.lower()
+    s = re.sub(r"[^\w\s']", " ", s)
+    s = re.sub(r"\s+", " ", s).strip()
+    return s
+
+def _too_similar(candidate: str, previous_texts: List[str]) -> bool:
+    cand_norm = _normalize_for_compare(candidate)
+    if not cand_norm:
+        return True
+    cand_words = cand_norm.split()
+    for prev in previous_texts:
+        prev_norm = _normalize_for_compare(prev)
+        if not prev_norm:
+            continue
+        if cand_norm == prev_norm:
+            return True
+        if difflib.SequenceMatcher(a=cand_norm, b=prev_norm).ratio() >= 0.8:
+            return True
+        prev_words = prev_norm.split()
+        if len(prev_words) >= 7 and len(cand_words) >= 7:
+            prev_ngrams = {" ".join(prev_words[i:i+7]) for i in range(len(prev_words) - 6)}
+            for j in range(len(cand_words) - 6):
+                if " ".join(cand_words[j:j+7]) in prev_ngrams:
+                    return True
+    return False
+
+# --- NEW: flag assistant-like language ---
+ASSISTANTY_PATTERNS = [
+    r"^(sure|certainly|of course|gladly|happy to help)\b",
+    r"\bhere(?:’|')s (?:how|what) you can do\b",
+    r"\bas an ai\b",
+    r"\b(step|steps)\s*\d|\bfirst,\s*second,\s*third\b",
+    r"```",                      # code fences
+    r"\bI can (help|assist|guide) you\b",
+    r"\blet me (help|assist|explain)\b",
+    r"\buse the following\b",
+    r"\baccording to your request\b",
+    r"\bassistant:|user:\b",     # role tags
+    r"\bHere’s a step-by-step\b",
+    r"\bI recommend\b\s",
+    r"\bIn summary\b",
+    r"\bi'm glad to hear\b",
+    r"\bi'm happy to hear\b",
+    r"\bi'm glad you\b",
+    r"\bi'm happy that you\b",
+    r"\blet me know if you\b",
+    r"\bdon't hesitate to ask\b",
+    r"\bfeel free to ask\b",
+    r"\bthat sounds like a helpful\b",
+    r"\bit sounds like\b",
+    r"\babsolutely,\b",
+]
+
+def _looks_like_assistant(text: str) -> bool:
+    t = text.strip().lower()
+    for pat in ASSISTANTY_PATTERNS:
+        if re.search(pat, t):
+            return True
+    # If it’s an instruction-heavy list without “I/me” and with many imperatives
+    imperative_hits = len(re.findall(r"\b(open|click|run|add|install|create|use|try|follow|do|check)\b", t))
+    pronoun_hits = len(re.findall(r"\b(i|me|my|i’m|i’ve)\b", t))
+    if imperative_hits >= 3 and pronoun_hits == 0:
+        return True
+    # New: require personal pronouns for user-like speech
+    if pronoun_hits == 0:
+        return True
+    return False
+
+# --- PATCHED generator with role enforcement ---
 @retry(wait=wait_after_rate_limit_error, stop=stop_after_attempt(6))
 async def generate_llm_utterance(
     llm_client: AsyncOpenAI,
@@ -108,38 +182,94 @@ async def generate_llm_utterance(
     attribute_type: str,
     state: str,
     style_controlled: bool,
-    dialog_history: List[Dict[str, str]]
+    dialog_history: List[Dict[str, str]],
 ) -> str:
-    """Generates a realistic utterance using an external LLM, with intelligent retries."""
-    system_prompt = (
-        f"You are role-playing as a '{role}' in a conversation about {topic}. "
-        f"Your current internal state for the '{attribute_type}' attribute is '{state}'. "
-        "Generate a single, realistic, and concise conversational turn that reflects this state."
-        "CRITICAL RULE: Do not repeat, echo, or rephrase the previous turn. Always generate a new, original response."
-    )
-    if style_controlled and role == 'user':
-        style_prompt = (
-            f"You MUST convey the '{state}' state **implicitly and subtly**. "
-            "DO NOT use obvious keywords. Use tone and phrasing."
-        )
+    """Generates a single turn with anti-echo and role guards."""
+
+    base_rules = [
+        "Write exactly one concise conversational turn for the {role}.",
+        "Do NOT repeat, quote, or paraphrase earlier messages.",
+        "Do NOT reuse any full sentence from earlier in the dialog.",
+        "Do NOT reuse any sequence of 7+ consecutive words from earlier messages.",
+        "No stage directions or brackets; just the line.",
+    ]
+    if role == "user":
+        # Strongly steer away from assistant-y behavior
+        base_rules += [
+            "You are a regular person, not an AI assistant.",
+            "Do NOT give instructions, numbered steps, recommendations, or tutorials.",
+            "Do NOT start with words like 'Sure', 'Certainly', or 'As an AI'.",
+            "Do NOT include code blocks or commands.",
+            "Speak in first person as a human with feelings and goals.",
+        ]
     else:
-        style_prompt = "You can express yourself naturally."
+        # Assistant stays helpful but still concise
+        base_rules += [
+            "Be helpful and relevant to the user’s last message.",
+        ]
 
-    final_system_prompt = f"{system_prompt}\n{style_prompt}"
-    messages = [{"role": "system", "content": final_system_prompt}]
+    system_prompt = (
+        f"You are role-playing as the '{role}' in a conversation about {topic}.\n"
+        f"Your current internal state for the '{attribute_type}' attribute is '{state}'.\n"
+        + "\n".join(base_rules)
+    ).replace("{role}", role)
+
+    if style_controlled and role == "user":
+        style_prompt = (
+            f"Convey the '{state}' state implicitly via tone and phrasing. "
+            "Avoid overt labels like 'I'm sad/unsure/confident', etc."
+        )
+        system_prompt += "\n" + style_prompt
+
+    chat_messages = [{"role": "system", "content": system_prompt}]
     for turn in dialog_history:
-        messages.append({"role": turn["role"], "content": turn["text"]})
+        chat_messages.append({"role": turn["role"], "content": turn["text"]})
 
-    # [THE KEY FIX] Use the model your account has access to.
-    # This is the change that makes the script work reliably.
-    response = await llm_client.chat.completions.create(
-        model="gpt-3.5-turbo", # Changed from "gpt-4o"
-        messages=messages,
-        temperature=0.9,
-        max_tokens=80,
-    )
-    generated_text = response.choices[0].message.content.strip()
-    if not generated_text: raise ValueError("LLM returned an empty response.")
+    previous_texts = [m["text"] for m in dialog_history]
+
+    # Up to 3 local resamples if similarity or role violation triggers
+    generated_text = ""
+    for _ in range(3):
+        resp = await llm_client.chat.completions.create(
+            model="gpt-4o",
+            messages=chat_messages,
+            temperature=0.9,
+            max_tokens=80,
+            presence_penalty=0.3,
+            frequency_penalty=0.8,
+        )
+        generated_text = (resp.choices[0].message.content or "").strip()
+        if not generated_text:
+            chat_messages.insert(1, {"role": "system", "content": "Your last attempt was empty. Produce one non-empty line."})
+            continue
+
+        # Block assistant-like “user” lines
+        if role == "user" and _looks_like_assistant(generated_text):
+            chat_messages.insert(1, {
+                "role": "system",
+                "content": (
+                    "Your last attempt sounded like an AI assistant. Rewrite as a normal person speaking casually. "
+                    "No instructions, no numbered steps, no 'Sure/Certainly', no code, no recommendations."
+                ),
+            })
+            continue
+
+        # Still avoid parroting
+        if _too_similar(generated_text, previous_texts):
+            chat_messages.insert(1, {
+                "role": "system",
+                "content": "Your last attempt was too similar to earlier messages. Rewrite with new wording and ideas.",
+            })
+            continue
+
+        return generated_text
+
+    # Fallback (best-effort)
+    if role == "user" and _looks_like_assistant(generated_text):
+        # Force a neutral casual rephrase if we still failed; keep it short and safe
+        generated_text = "Yeah, that makes sense. I’m thinking about how to approach it from my side."
+    if not generated_text:
+        raise ValueError("LLM returned an empty response after multiple attempts.")
     return generated_text
 
 # ----------------- Templates (For 'knowledge') ------------------
@@ -225,8 +355,8 @@ async def main():
 
         # ---! ACTION REQUIRED !---
     # Paste your Project Key and Project ID here
-    my_api_key = ""  # Paste your new PROJECT key here
-    my_project_id = ""   # Paste your PROJECT ID here
+    # my_api_key = "***REMOVED***"  # Paste your new PROJECT key here
+    # my_project_id = "proj_Qfc9qLC7APrsLx2PB0XNm92C"   # Paste your PROJECT ID here
 
     try:
         llm_client = AsyncOpenAI(

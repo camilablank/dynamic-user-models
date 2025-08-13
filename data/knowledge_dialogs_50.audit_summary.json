@@ -1,0 +1,6 @@
+{
+  "n_dialogs": 50,
+  "style_controlled_fraction": 0.22,
+  "audited_knowledge_dialogs": 50,
+  "knowledge_consistency_score": 1.0
+}

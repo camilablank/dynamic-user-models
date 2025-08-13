@@ -4,9 +4,9 @@ phase_3_probes.py
 
 Phase 3: Train linear logistic probes on residual stream representations
 captured at the last token of a special probe message:
-  "Assistant: I think the {attribute} of this user is"
+  "Assistant: I think the {state} of this user is"
 
-Per attribute family (emotion, knowledge, confidence, trust), we:
+Per state family (emotion, knowledge, confidence, trust), we:
   - Extract features (final-layer last-token hidden state) per user turn
   - Train multinomial logistic regression (linear probe)
   - Evaluate per-turn accuracy, switch latency error, consistency score
@@ -40,7 +40,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 ATTRS = ["emotion", "knowledge", "confidence", "trust"]
 
-SPECIAL_PROBE_FMT = "Assistant: I think the {attribute} of this user is"
+SPECIAL_PROBE_FMT = "Assistant: I think the {state} of this user is"
 USER_PREFIX = "User: "
 ASSIST_PREFIX = "Assistant: "
 
@@ -74,7 +74,7 @@ def load_jsonl(path: str) -> List[Dict[str, Any]]:
 def group_by_attr(dialogs: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
     g = defaultdict(list)
     for d in dialogs:
-        at = d.get("attribute_type")
+        at = d.get("state_type")
         if at in ATTRS:
             g[at].append(d)
     return g
@@ -102,9 +102,9 @@ def format_plain_chat_upto_turn(d: Dict[str, Any], upto_user_turn: int) -> str:
             parts.append(f"{ASSIST_PREFIX}{txt}")
     return "\n".join(parts)
 
-def append_probe(prompt_so_far: str, attribute: str) -> str:
+def append_probe(prompt_so_far: str, state: str) -> str:
     return (prompt_so_far + ("\n" if prompt_so_far and not prompt_so_far.endswith("\n") else "")
-            + SPECIAL_PROBE_FMT.format(attribute=attribute))
+            + SPECIAL_PROBE_FMT.format(state=state))
 
 # ---------- feature extraction ----------
 
@@ -135,9 +135,9 @@ def extract_last_token_repr(
         feats.append(vec)
     return np.stack(feats, axis=0)
 
-def build_turn_prompts_for_attr(d: Dict[str, Any], attribute: str, use_chat_template: bool) -> Tuple[List[str], List[str]]:
+def build_turn_prompts_for_attr(d: Dict[str, Any], state: str, use_chat_template: bool) -> Tuple[List[str], List[str]]:
     """
-    For a single dialog d and attribute family, return:
+    For a single dialog d and state family, return:
       texts: list of prompts (one per user turn)
       labels: list of labels (gold per-turn labels)
     """
@@ -148,12 +148,12 @@ def build_turn_prompts_for_attr(d: Dict[str, Any], attribute: str, use_chat_temp
     labels = []
     for ut in range(n_user_turns):
         base = format_plain_chat_upto_turn(d, ut)
-        probe = append_probe(base, attribute)
+        probe = append_probe(base, state)
         texts.append(probe)
         labels.append(labels_seq[ut])
     return texts, labels
 
-def collect_dataset_for_attr(dialogs_attr: List[Dict[str, Any]], attribute: str, use_chat_template: bool) -> Tuple[List[str], List[str], List[Tuple[str,int]], Dict[str, Tuple[int, List[str]]]]:
+def collect_dataset_for_attr(dialogs_attr: List[Dict[str, Any]], state: str, use_chat_template: bool) -> Tuple[List[str], List[str], List[Tuple[str,int]], Dict[str, Tuple[int, List[str]]]]:
     """
     Builds:
       prompts: List[str]  (per user turn)
@@ -169,7 +169,7 @@ def collect_dataset_for_attr(dialogs_attr: List[Dict[str, Any]], attribute: str,
         labels_seq = d["user_state_per_turn"]
         conv_gt[conv_id] = (switch_idx, labels_seq)
 
-        p_texts, p_labels = build_turn_prompts_for_attr(d, attribute, use_chat_template)
+        p_texts, p_labels = build_turn_prompts_for_attr(d, state, use_chat_template)
         for i, (t, y) in enumerate(zip(p_texts, p_labels)):
             prompts.append(t)
             labels.append(y)
@@ -229,9 +229,9 @@ def main():
     ap.add_argument("--batch_size", type=int, default=1, help="Feature extraction is sequential per prompt; batching helps with KV cache but we keep 1 for safety.")
     ap.add_argument("--test_size", type=float, default=0.3)
     ap.add_argument("--seed", type=int, default=42)
-    ap.add_argument("--attr", choices=ATTRS, help="Only run this attribute")
+    ap.add_argument("--attr", choices=ATTRS, help="Only run this state")
     ap.add_argument("--use_chat_template", action="store_true", help="Apply tokenizer chat template if available")
-    ap.add_argument("--save_feats_dir", type=str, default=None, help="Optional: save features/labels per attribute to npz")
+    ap.add_argument("--save_feats_dir", type=str, default=None, help="Optional: save features/labels per state to npz")
     ap.add_argument("--out_csv", type=str, default=None, help="Optional: save summary CSV")
     args = ap.parse_args()
 
@@ -269,14 +269,14 @@ def main():
 
     rng = np.random.RandomState(args.seed)
 
-    for attribute, dlist in by_attr.items():
+    for state, dlist in by_attr.items():
         if not dlist:
-            print(f"[skip] no dialogs for {attribute}")
+            print(f"[skip] no dialogs for {state}")
             continue
-        print(f"[run] attribute={attribute} dialogs={len(dlist)}")
+        print(f"[run] state={state} dialogs={len(dlist)}")
 
         # Build prompts/labels
-        prompts, labels, metas, conv_gt = collect_dataset_for_attr(dlist, attribute, args.use_chat_template)
+        prompts, labels, metas, conv_gt = collect_dataset_for_attr(dlist, state, args.use_chat_template)
 
         # Train/test split by conversation id
         conv_ids = sorted({cid for cid, _ in metas})
@@ -299,7 +299,7 @@ def main():
 
         if args.save_feats_dir:
             np.savez_compressed(
-                os.path.join(args.save_feats_dir, f"{attribute}_feats.npz"),
+                os.path.join(args.save_feats_dir, f"{state}_feats.npz"),
                 X_tr=X_tr, y_tr=np.array(labels_tr, dtype=object),
                 X_te=X_te, y_te=np.array(labels_te, dtype=object),
                 metas_tr=np.array(metas_tr, dtype=object),
@@ -309,7 +309,7 @@ def main():
         # Train/eval probe
         metrics = eval_probe(X_tr, labels_tr, X_te, labels_te, metas_te, conv_gt)
         row = {
-            "attribute": attribute,
+            "state": state,
             "per_turn_acc": metrics["per_turn_acc"],
             "mean_switch_error": metrics["mean_switch_error"],
             "consistency_score": metrics["consistency_score"],
@@ -322,19 +322,19 @@ def main():
         }
         rows.append(row)
 
-        print("attribute,per_turn_acc,mean_switch_error,consistency_score,n_train_turns,n_test_turns,n_train_convs,n_test_convs,hidden_size,model")
+        print("state,per_turn_acc,mean_switch_error,consistency_score,n_train_turns,n_test_turns,n_train_convs,n_test_convs,hidden_size,model")
         print(",".join(str(row[k]) for k in [
-            "attribute","per_turn_acc","mean_switch_error","consistency_score",
+            "state","per_turn_acc","mean_switch_error","consistency_score",
             "n_train_turns","n_test_turns","n_train_convs","n_test_convs","hidden_size","model"
         ]))
 
     # Save CSV summary
     if args.out_csv:
         with open(args.out_csv, "w", encoding="utf-8") as f:
-            f.write("attribute,per_turn_acc,mean_switch_error,consistency_score,n_train_turns,n_test_turns,n_train_convs,n_test_convs,hidden_size,model\n")
+            f.write("state,per_turn_acc,mean_switch_error,consistency_score,n_train_turns,n_test_turns,n_train_convs,n_test_convs,hidden_size,model\n")
             for r in rows:
                 f.write(",".join(str(r[k]) for k in [
-                    "attribute","per_turn_acc","mean_switch_error","consistency_score",
+                    "state","per_turn_acc","mean_switch_error","consistency_score",
                     "n_train_turns","n_test_turns","n_train_convs","n_test_convs","hidden_size","model"
                 ]) + "\n")
         print(f"[saved] {args.out_csv}")

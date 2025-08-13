@@ -225,8 +225,8 @@ async def main():
 
         # ---! ACTION REQUIRED !---
     # Paste your Project Key and Project ID here
-    my_api_key = "***REMOVED***"  # Paste your new PROJECT key here
-    my_project_id = "proj_Qfc9qLC7APrsLx2PB0XNm92C"   # Paste your PROJECT ID here
+    my_api_key = ""  # Paste your new PROJECT key here
+    my_project_id = ""   # Paste your PROJECT ID here
 
     try:
         llm_client = AsyncOpenAI(

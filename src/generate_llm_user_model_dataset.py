@@ -309,6 +309,7 @@ def main():
     parser.add_argument("--model", type=str, default="gpt-4o", help="Chat Completions model")
     parser.add_argument("--temperature", type=float, default=0.9)
     parser.add_argument("--n_per_attr", type=int, default=6, help="Samples per attribute (emotion, confidence, trust, knowledge)")
+    parser.add_argument("--append", action="store_true", help="Append to existing file instead of overwriting")
     parser.add_argument("--styles", type=str, default=",".join(DEFAULT_STYLES), help="Comma-separated styles to pick from")
     parser.add_argument("--min_turns", type=int, default=10)
     parser.add_argument("--max_turns", type=int, default=16)
@@ -337,8 +338,15 @@ def main():
     output_dir = os.path.dirname(args.out)
     if output_dir and not os.path.exists(output_dir):
         os.makedirs(output_dir)
+    
+    # Choose file mode based on append flag
+    file_mode = "a" if args.append else "w"
+    if args.append and os.path.exists(args.out):
+        print(f"Appending to existing file: {args.out}")
+    else:
+        print(f"Creating new file: {args.out}")
         
-    with open(args.out, "w", encoding="utf-8") as f:
+    with open(args.out, file_mode, encoding="utf-8") as f:
         for dim in dims:
             for i in range(args.n_per_attr):
                 style = random.choice(styles)
@@ -386,7 +394,8 @@ def main():
                     safe_msg = f"[WARN] Skipping {dim} #{i+1} due to error: {err}"; print(safe_msg)
                     continue
 
-    safe_msg = f"Done. Wrote {written} / {total} dialogs to {args.out}"; print(safe_msg)
+    action = "Appended" if args.append else "Wrote"
+    safe_msg = f"Done. {action} {written} / {total} dialogs to {args.out}"; print(safe_msg)
 
 if __name__ == "__main__":
     main()

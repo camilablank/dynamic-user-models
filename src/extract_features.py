@@ -86,8 +86,17 @@ def append_probe(prompt_so_far: str, attribute: str) -> str:
     sep = "" if (not prompt_so_far or prompt_so_far.endswith("\n")) else "\n"
     return f"{prompt_so_far}{sep}{suf}"
 
-def normalize_turn_label(attr: str, raw: str) -> str:
-    raw = (raw or "").strip().lower()
+def normalize_turn_label(attr: str, raw) -> str:
+    # Coerce non-string inputs
+    if isinstance(raw, bool):
+        # Special-case for knowledge: map booleans to canonical labels
+        raw = "knows" if raw else "does_not_know"
+    elif raw is None:
+        raw = ""
+    elif not isinstance(raw, str):
+        raw = str(raw)
+
+    raw = raw.strip().lower()
     return NORM.get(attr, {}).get(raw, FALLBACK[attr])
 
 
